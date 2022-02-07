@@ -18,5 +18,5 @@ public class IncomeList {
     private CategoryIncome category;
     private boolean  toTheBank;
     private String additionalInfo;
-    private double  balance;
+
 }
