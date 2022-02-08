@@ -8,6 +8,7 @@ import lt.henrixlt.model.PaymentMethod;
 import lt.henrixlt.util.Meniu;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class AppService {
@@ -54,18 +55,18 @@ public class AppService {
                 case "5":
                     //gauti islaidas pagal ID
                     System.out.println("iveskite suma nuo:");
-                    int from = scanner.nextInt();
+                    double from = scanner.nextDouble();
                     System.out.println("iveskite suma iki");
-                    int to = scanner.nextInt();
+                    double to = scanner.nextDouble();
                     budgedService.getExpensBetween(from,to);
 
                     break;
                 case "6":
                     //Gauti pajemas pagal ID
                     System.out.println("iveskite suma nuo:");
-                    int from2 = scanner.nextInt();
+                    double from2 = scanner.nextDouble();
                     System.out.println("iveskite suma iki");
-                    int to2 = scanner.nextInt();
+                    double to2 = scanner.nextDouble();
                     budgedService.getIncomeBetween(from2,to2);
 
                     break;
@@ -73,7 +74,7 @@ public class AppService {
                     //pagal kategorija islaidos
                     System.out.println("pasirinkite kategorija");
                     Meniu.prinCategoryExpens();
-                    budgedService.getExpensByCategory(CategoryExpenses.valueOf(scanner.next()));
+                    budgedService.getExpensByCategory(CategoryExpenses.valueOf(scanner.next().toUpperCase(Locale.ROOT)));
 
                     break;
                 case "8":

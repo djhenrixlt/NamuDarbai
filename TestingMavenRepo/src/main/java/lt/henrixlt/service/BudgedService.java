@@ -28,15 +28,28 @@ public class BudgedService {
         this.expenseLists[this.indexExpens] = expenseList;
         this.indexExpens++;
     }
-    public void getIncomeBetween(int from,int to){
+    public void getIncomeBetween(double from,double to){
         Arrays.stream(incomeLists)
-                .filter(C -> C.getSum()>= from && C.getSum() <= to)
-                .forEach(c -> System.out.println(c));
+                .filter(c -> c != null)
+                .filter(C -> C.getSum()>= from )
+                .filter(c -> c.getSum() <= to)
+                .forEach(C -> System.out.println(C));
+
     }
-    public void getExpensBetween(int from, int to){
-        Arrays.stream(expenseLists)
-                .filter(C -> C.getSum()>= from && C.getSum() <= to)
-                .forEach(c -> System.out.println(c));
+    public void getExpensBetween(double from, double to){
+//        for (int i =0; i < this.expenseLists.length - 1; i++ ) {
+//            if (from <= this.expenseLists[i].getSum()&& to >= this.expenseLists[i].getSum()){
+//                System.out.println(expenseLists[i]);
+//            }else {
+//                System.out.println("Irasai nerasti");
+//            }
+//        }
+
+            Arrays.stream(expenseLists)
+                    .filter(c -> c != null)
+                    .filter(C -> C.getSum()>= from )
+                    .filter(c -> c.getSum() <= to)
+                    .forEach(C -> System.out.println(C));
     }
     public void getIncomesByCategory(Enum category){
         Arrays.stream(incomeLists)
