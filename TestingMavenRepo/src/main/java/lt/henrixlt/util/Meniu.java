@@ -8,8 +8,8 @@ public class Meniu {
                 "2: ivesti islaidas \n" +
                 "3: paziureti islaidas\n" +
                 "4: paziureti pajemas\n" +
-                "5: gauti islaidas pagal ID\n" +
-                "6: gauti pajemas pagal ID\n" +
+                "5: gauti islaidas nuo iki\n" +
+                "6: gauti pajemas nuo iki\n" +
                 "7: pasirinkite kategorija kad gautumet islaidas\n" +
                 "8: iveskite kategorija kad gautumet pajemas\n" +
                 "9: iseiti is programos");

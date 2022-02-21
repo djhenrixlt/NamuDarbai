@@ -8,12 +8,13 @@ import lt.henrixlt.model.PaymentMethod;
 import lt.henrixlt.util.Meniu;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class AppService {
     private BudgedService budgedService = new BudgedService();
-    private ExpenseList expenseList = new ExpenseList();
-    private IncomeList incomeList = new IncomeList();
+
+
     private int incomeID;
     private int expensesID;
 
@@ -26,14 +27,16 @@ public class AppService {
             Meniu.printMeniu();
             switch (scanner.next()) {
                 case "1":
+                    IncomeList incomeList = new IncomeList();
                     incomeID++;
-                    setIncoms(scanner);
+                    setIncoms(scanner,incomeList);
                     budgedService.addIncoms(incomeList);
                     break;
                 case "2":
+                    ExpenseList expenseList = new ExpenseList();
                     System.out.println("iveskite Islaidu suma :");
                     double expenses = scanner.nextDouble();
-                    setExpenses(scanner, expenses);
+                    setExpenses(scanner, expenses,expenseList);
                     budgedService.addExpenseList(expenseList);
 
 
@@ -50,31 +53,35 @@ public class AppService {
                             .forEach(System.out::println);
                     break;
                 case "5":
-                    System.out.println("iveskite savo ID: ");
-                    int idHer =  scanner.nextInt();
-                    if (idHer == expenseList.getId()){
-                        budgedService.getExpensByID(idHer);
-                    }else {
-                        System.out.println("netinkamas ID");
-                    }
-
+                    //gauti islaidas pagal ID
+                    System.out.println("iveskite suma nuo:");
+                    double from = scanner.nextDouble();
+                    System.out.println("iveskite suma iki");
+                    double to = scanner.nextDouble();
+                    budgedService.getExpensBetween(from,to);
 
                     break;
                 case "6":
-                    System.out.println("iveskite savo ID: ");
-                    int idHer2 =  scanner.nextInt();
-                    if (idHer2 == incomeList.getId()){
-                        budgedService.getIncomeByID(idHer2);
-                    }else {
-                        System.out.println("netinkamas ID");
-                    }
+                    //Gauti pajemas pagal ID
+                    System.out.println("iveskite suma nuo:");
+                    double from2 = scanner.nextDouble();
+                    System.out.println("iveskite suma iki");
+                    double to2 = scanner.nextDouble();
+                    budgedService.getIncomeBetween(from2,to2);
 
                     break;
                 case "7":
-
+                    //pagal kategorija islaidos
+                    System.out.println("pasirinkite kategorija");
+                    Meniu.prinCategoryExpens();
+                    budgedService.getExpensByCategory(CategoryExpenses.valueOf(scanner.next().toUpperCase(Locale.ROOT)));
 
                     break;
                 case "8":
+                    // pagal kategorija pagal pajemas
+                    System.out.println("pasirinkite kategorija");
+                    Meniu.printCategoryIncome();
+                    budgedService.getIncomesByCategory(CategoryIncome.valueOf(scanner.next()));
 
                     break;
                 case "9":
@@ -85,18 +92,18 @@ public class AppService {
         }
     }
 
-    private void setIncoms(Scanner scanner) {
+    private void setIncoms(Scanner scanner,IncomeList incomeList ) {
         incomeList.setId(incomeID);
         System.out.println("iveskite norima pinigu suma patalpinti i savo saskaita: ");
         incomeList.setSum(scanner.nextDouble());
-        setCategoryIncome(scanner);
+        setCategoryIncome(scanner, incomeList);
         incomeList.setToTheBank(true);
         System.out.println("iveskite papildoma info");
         incomeList.setAdditionalInfo(scanner.next());
-        incomeList.setBalance(incomeList.getBalance() + incomeList.getSum());
+        budgedService.setBalance(budgedService.getBalance() + incomeList.getSum());
     }
 
-    private void setCategoryIncome(Scanner scanner) {
+    private void setCategoryIncome(Scanner scanner, IncomeList incomeList) {
         System.out.println("pasirinkite kategorija: ");
         Meniu.printCategoryIncome();
         switch (scanner.next()){
@@ -120,14 +127,14 @@ public class AppService {
         }
     }
 
-    private void setExpenses(Scanner scanner, double expenses) {
-        if (expenses < incomeList.getBalance()) {
+    private void setExpenses(Scanner scanner, double expenses,ExpenseList expenseList) {
+        if (expenses < budgedService.getBalance()) {
             expensesID++;
             expenseList.setId(expensesID);
             expenseList.setSum(expenses);
-            incomeList.setBalance(incomeList.getBalance() - expenses);
-            setCategoryEXpens(scanner);
-            setPaymentMethod(scanner);
+            budgedService.setBalance(budgedService.getBalance() - expenses);
+            setCategoryEXpens(scanner, expenseList);
+            setPaymentMethod(scanner, expenseList);
         } else {
             System.out.println("nepakankamas likutis");
         }
@@ -136,7 +143,7 @@ public class AppService {
         expenseList.setAdditionalInfo(scanner.next());
     }
 
-    private void setCategoryEXpens(Scanner scanner) {
+    private void setCategoryEXpens(Scanner scanner, ExpenseList expenseList) {
         System.out.println("pasirinkite kategorija: ");
         Meniu.prinCategoryExpens();
         switch (scanner.next()){
@@ -164,7 +171,7 @@ public class AppService {
         }
     }
 
-    private void setPaymentMethod(Scanner scanner) {
+    private void setPaymentMethod(Scanner scanner, ExpenseList expenseList) {
         System.out.println("pasirinkite mokejimo buda :");
         Meniu.printCategory();
 
